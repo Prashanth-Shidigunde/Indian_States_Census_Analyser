@@ -5,6 +5,7 @@ import com.opencsv.bean.CsvToBeanBuilder;
 
 import java.io.FileReader;
 import java.io.Reader;
+import java.io.*;
 import java.util.Iterator;
 
 public class StateCensusAnalyser {
@@ -14,12 +15,27 @@ public class StateCensusAnalyser {
 
         try {
 
-            // Check file type
+            // Check file extension
             if (!csvFilePath.endsWith(".csv")) {
                 throw new CensusAnalyserException(
                         "Invalid File Type",
                         CensusAnalyserException.ExceptionType.INVALID_FILE_TYPE);
             }
+
+            // Read header
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(csvFilePath));
+
+            String header = bufferedReader.readLine();
+
+            String expectedHeader = "State,Population,AreaInSqKm,DensityPerSqKm";
+
+            if (!expectedHeader.equals(header)) {
+                throw new CensusAnalyserException(
+                        "Invalid CSV Header",
+                        CensusAnalyserException.ExceptionType.INVALID_HEADER);
+            }
+
+            bufferedReader.close();
 
             Reader reader = new FileReader(csvFilePath);
 
@@ -34,19 +50,7 @@ public class StateCensusAnalyser {
             int count = 0;
 
             while (iterator.hasNext()) {
-                CSVStateCensus census = iterator.next();
-
-                /*
-                 * If the delimiter is incorrect,
-                 * OpenCSV cannot map the columns correctly.
-                 * The fields become null or default values.
-                 */
-                if (census.state == null) {
-                    throw new CensusAnalyserException(
-                            "Invalid Delimiter",
-                            CensusAnalyserException.ExceptionType.INVALID_DELIMITER);
-                }
-
+                iterator.next();
                 count++;
             }
 
