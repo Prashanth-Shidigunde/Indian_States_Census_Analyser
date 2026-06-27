@@ -65,5 +65,21 @@ public class StateCensusAnalyserTest {
                 CensusAnalyserException.ExceptionType.INVALID_DELIMITER,
                 exception.type);
     }
+    @Test
+    void givenStateCensusCSV_WhenHeaderIncorrect_ShouldThrowCustomException() {
+
+        StateCensusAnalyser analyser = new StateCensusAnalyser();
+
+        CensusAnalyserException exception =
+                assertThrows(
+                        CensusAnalyserException.class,
+                        () -> analyser.loadStateCensusData(
+                                "src/main/resources/censusWrongDelimiter.csv"));
+
+        assertEquals(
+                CensusAnalyserException.ExceptionType.INVALID_HEADER,
+                exception.type);
+    }
+
 
 }
