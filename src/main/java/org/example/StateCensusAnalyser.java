@@ -14,7 +14,7 @@ public class StateCensusAnalyser {
 
         try {
 
-            // Check whether the file is a CSV
+            // Check file type
             if (!csvFilePath.endsWith(".csv")) {
                 throw new CensusAnalyserException(
                         "Invalid File Type",
@@ -34,7 +34,19 @@ public class StateCensusAnalyser {
             int count = 0;
 
             while (iterator.hasNext()) {
-                iterator.next();
+                CSVStateCensus census = iterator.next();
+
+                /*
+                 * If the delimiter is incorrect,
+                 * OpenCSV cannot map the columns correctly.
+                 * The fields become null or default values.
+                 */
+                if (census.state == null) {
+                    throw new CensusAnalyserException(
+                            "Invalid Delimiter",
+                            CensusAnalyserException.ExceptionType.INVALID_DELIMITER);
+                }
+
                 count++;
             }
 
