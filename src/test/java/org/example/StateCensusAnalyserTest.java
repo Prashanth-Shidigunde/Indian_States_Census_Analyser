@@ -50,5 +50,20 @@ public class StateCensusAnalyserTest {
                 CensusAnalyserException.ExceptionType.INVALID_FILE_TYPE,
                 exception.type);
     }
+    @Test
+    void givenStateCensusCSV_WhenDelimiterIncorrect_ShouldThrowCustomException() {
+
+        StateCensusAnalyser analyser = new StateCensusAnalyser();
+
+        CensusAnalyserException exception =
+                assertThrows(
+                        CensusAnalyserException.class,
+                        () -> analyser.loadStateCensusData(
+                                "src/main/resources/censusWrongDelimiter.csv"));
+
+        assertEquals(
+                CensusAnalyserException.ExceptionType.INVALID_DELIMITER,
+                exception.type);
+    }
 
 }

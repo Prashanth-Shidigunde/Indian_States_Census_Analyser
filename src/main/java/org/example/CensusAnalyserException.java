@@ -2,9 +2,10 @@ package org.example;
 
 public class CensusAnalyserException extends Exception {
 
-    enum ExceptionType {
+    public enum ExceptionType {
         CENSUS_FILE_PROBLEM,
-        INVALID_FILE_TYPE
+        INVALID_FILE_TYPE,
+        INVALID_DELIMITER
     }
 
     ExceptionType type;
