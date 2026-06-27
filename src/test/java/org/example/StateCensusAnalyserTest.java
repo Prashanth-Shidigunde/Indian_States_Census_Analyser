@@ -3,6 +3,7 @@ package org.example;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class StateCensusAnalyserTest {
 
@@ -21,4 +22,18 @@ public class StateCensusAnalyserTest {
         // Replace 29 with the actual number of data rows in your CSV
         assertEquals(36, actualRecordCount);
     }
+
+
+    @Test
+    void givenWrongCSVFile_WhenLoaded_ShouldThrowCustomException() {
+
+        StateCensusAnalyser analyser = new StateCensusAnalyser();
+
+        assertThrows(
+                CensusAnalyserException.class,
+                () -> analyser.loadStateCensusData(
+                        "src/main/resources/WrongFile.csv")
+        );
+    }
+
 }
