@@ -67,4 +67,45 @@ public class StateCensusAnalyser {
                     CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
         }
     }
+    public <E> int loadCSVData(Class<E> csvClass, String csvFilePath)
+            throws CensusAnalyserException {
+
+        try {
+
+            if (!csvFilePath.endsWith(".csv")) {
+                throw new CensusAnalyserException(
+                        "Invalid File Type",
+                        CensusAnalyserException.ExceptionType.INVALID_FILE_TYPE);
+            }
+
+            Reader reader = new FileReader(csvFilePath);
+
+            CsvToBean<E> csvToBean =
+                    new CsvToBeanBuilder<E>(reader)
+                            .withType(csvClass)
+                            .withIgnoreLeadingWhiteSpace(true)
+                            .build();
+
+            Iterator<E> iterator = csvToBean.iterator();
+
+            int count = 0;
+
+            while (iterator.hasNext()) {
+                iterator.next();
+                count++;
+            }
+
+            reader.close();
+
+            return count;
+
+        } catch (CensusAnalyserException e) {
+            throw e;
+
+        } catch (Exception e) {
+            throw new CensusAnalyserException(
+                    e.getMessage(),
+                    CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
+        }
+    }
 }

@@ -80,6 +80,18 @@ public class StateCensusAnalyserTest {
                 CensusAnalyserException.ExceptionType.INVALID_HEADER,
                 exception.type);
     }
+    @Test
+    void givenStateCensusCSV_WhenCorrect_ShouldReturnRecordCount()
+            throws CensusAnalyserException {
+
+        StateCensusAnalyser analyser = new StateCensusAnalyser();
+
+        int records = analyser.loadCSVData(
+                CSVStateCensus.class,
+                "src/main/resources/CSVStateCode.csv");
+
+        assertEquals(3, records);
+    }
 
 
 }
